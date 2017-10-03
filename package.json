@@ -4,7 +4,8 @@
   "description": "Displays movie trailers with good imdb scores",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
   },
   "keywords": [
     "youtube",
@@ -16,10 +17,13 @@
   "dependencies": {
     "assert": "^1.4.1",
     "bluebird": "^3.5.0",
+    "cookie-parser": "^1.4.3",
     "express": "^4.16.1",
     "express-handlebars": "^3.0.0",
     "imdb-api": "^3.1.1",
+    "log-switch": "0.0.3",
     "movie-trailer": "^1.0.3",
+    "nodemon": "^1.12.1",
     "phantom": "^4.0.5",
     "x-ray": "^2.3.2",
     "x-ray-phantom": "^1.0.1"
