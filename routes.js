@@ -14,14 +14,16 @@ var x = Xray();
 
 var debug = false;
 
-function generateRandom(min, max, arr) {
+
+//Generate a random number excluding the numbers on the given array
+function randomExc(min, max, arr) {
     var num = Math.floor(Math.random() * (max - min + 1)) + min;
 
     if(arr){
       var exclude = arr.every(function(val){ return arr.indexOf(num) >= 0 });
       if(exclude){
         console.log('Random num is in array, do over');
-        generateRandom(min, max, arr);
+        randomExc(min, max, arr);
       }
       else{
         console.log('Random num is not in array ',num);
@@ -35,7 +37,7 @@ function generateRandom(min, max, arr) {
 
 router.get('/', (req, res) => {
   console.log('Page requested!');
-  console.log('Cookies: ', req.cookies); // For some reason this returns undefined
+  console.log('Cookies: ', req.cookies);
 
   var scrapeMovies = function(){
     return new Promise((resolve, reject) =>{
@@ -66,25 +68,33 @@ router.get('/', (req, res) => {
     });
   };
   */
-
   scrapeMovies().then(
     movies => {
-      var randomInt;
-
-      if(req.cookies.randomInt) {
-        var cookieStr = req.cookies.randomInt;
-        var cookieArr = typeof(cookieStr) == 'string' ? JSON.parse(cookieStr) : cookieStr; //Make sure the cookie is an Array
-        randomInt = generateRandom(0,movies.length,cookieArr);
-        cookieArr.push(randomInt);
-        res.cookie('randomInt',cookieArr);
+      /* Don't write or read cookies when a query for trailer is sent
+      Instead populate the randomMovie object with the trailer requested */
+      if(req.query.trailer){
+        randomMovie = {title: req.query.trailer};
       }
       else{
-      res.cookie('randomInt', JSON.stringify(generateRandom(0,movies.length)));
+        var randomInt;
+
+        //Make sure the random index has never been requested by the client
+        if(req.cookies.randomInt) {
+          var cookieStr = req.cookies.randomInt;
+          var cookieArr = typeof(cookieStr) == 'string' ? JSON.parse(cookieStr) : cookieStr; //Make sure the cookie is an Array
+          randomInt = randomExc(0,movies.length,cookieArr);
+          cookieArr.push(randomInt);
+          res.cookie('randomInt',cookieArr);
+        }
+        else{
+          randomInt = randomExc(0,movies.length)
+        res.cookie('randomInt', JSON.stringify(randomInt));
+        }
+
+
+        var randomMovie = movies[randomInt];
+        var numberArr = [randomInt];
       }
-
-
-      var randomMovie = movies[randomInt];
-      var numberArr = [randomInt];
 
       movieTrailer(randomMovie.title, (err, url) =>{
         console.log('Requesting trailer for: ', randomMovie.title, ' with index ', randomInt);
