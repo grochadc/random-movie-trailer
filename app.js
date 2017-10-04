@@ -10,8 +10,11 @@ var routes = require('./routes');
 
 var debug = true;
 
-app.use('/', routes);
+
 app.use(express.static('public'));
+app.use(cookieParser());
+app.use('/', routes);
+
 //app.use(cookieParser());
 
 //View engine

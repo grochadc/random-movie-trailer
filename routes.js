@@ -6,6 +6,7 @@ var movieTrailer = require('movie-trailer');
 var Promise = require('bluebird');
 var logs = require('log-switch');
 var fs = require('fs');
+//var cookieParser = require('cookie-parser');
 
 //Setup x-ray for scraping
 var Xray = require('x-ray');
@@ -13,10 +14,28 @@ var x = Xray();
 
 var debug = false;
 
+function generateRandom(min, max, arr) {
+    var num = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    if(arr){
+      var exclude = arr.every(function(val){ return arr.indexOf(num) >= 0 });
+      if(exclude){
+        console.log('Random num is in array, do over');
+        generateRandom(min, max, arr);
+      }
+      else{
+        console.log('Random num is not in array ',num);
+        return num;
+      }
+    }
+    else {
+      return num;
+    }
+};
+
 router.get('/', (req, res) => {
   console.log('Page requested!');
-
-  //res.cookie('random_nums', '[1,2,3,4]');
+  console.log('Cookies: ', req.cookies); // For some reason this returns undefined
 
   var scrapeMovies = function(){
     return new Promise((resolve, reject) =>{
@@ -50,19 +69,28 @@ router.get('/', (req, res) => {
 
   scrapeMovies().then(
     movies => {
-      var randomInt = Math.floor(Math.random() * movies.length);
+      var randomInt;
+
+      if(req.cookies.randomInt) {
+        var cookieStr = req.cookies.randomInt;
+        var cookieArr = typeof(cookieStr) == 'string' ? JSON.parse(cookieStr) : cookieStr; //Make sure the cookie is an Array
+        randomInt = generateRandom(0,movies.length,cookieArr);
+        cookieArr.push(randomInt);
+        res.cookie('randomInt',cookieArr);
+      }
+      else{
+      res.cookie('randomInt', JSON.stringify(generateRandom(0,movies.length)));
+      }
+
+
       var randomMovie = movies[randomInt];
-      console.log(movies);
-      console.log('randomMovie.title',randomMovie.title);
+      var numberArr = [randomInt];
 
       movieTrailer(randomMovie.title, (err, url) =>{
-        console.log('Trailer requested!', randomMovie.title);
+        console.log('Requesting trailer for: ', randomMovie.title, ' with index ', randomInt);
         if(err) throw err;
         var embedUrl = url.replace('watch?v=','embed/');
-        console.log('Embed HTML: ', );
-        console.log('Full url: ',url);
         console.log('Video ID: ', url.slice(32,url.length));
-        console.log('Embed Url: ', embedUrl);
         randomMovie.trailerURL = embedUrl; //Add the embed URL to the randomMovie object before rendering it
         res.render('main',randomMovie,
         (err, html) =>
