@@ -6,11 +6,6 @@ var movieTrailer = require('movie-trailer');
 var Promise = require('bluebird');
 var logs = require('log-switch');
 var fs = require('fs');
-//var cookieParser = require('cookie-parser');
-
-//Setup x-ray for scraping
-var Xray = require('x-ray');
-var x = Xray();
 
 var debug = false;
 var random = require('./lib/random');
@@ -34,26 +29,6 @@ router.get('/', (req, res) => {
     });
   };
 
-  /*
-  var username = 'medicengonzo';
-  var pages = 3;
-
-  var scrapeMovies = function() {
-    if (debug) console.log('scrapeMovies()');
-    return new Promise((resolve, reject) => {
-      x('https://letterboxd.com/' + username + '/watchlist/', 'li.poster-container', [{
-          title: 'img@alt'
-        }])((err, results) => {
-          console.log('Scraping movies');
-          if (err) reject(err);
-          resolve(results);
-        })
-        .paginate('.paginate-current+li a@href')
-        .limit(pages);
-
-    });
-  };
-  */
   scrapeMovies().then(
     movies => {
       /* Don't write or read cookies when a query for trailer is sent
@@ -65,7 +40,7 @@ router.get('/', (req, res) => {
         var randomInt;
 
         //Make sure the random index has never been requested by the client
-        if(req.cookies.length && req.cookies.randomInt) {
+        if(req.cookies.randomInt) {
           var cookieStr = req.cookies.randomInt;
           var cookieArr = typeof(cookieStr) == 'string' ? JSON.parse(cookieStr) : cookieStr; //Make sure the cookie is an Array
           randomInt = random.exclude(0,movies.length,cookieArr, true);
@@ -73,8 +48,8 @@ router.get('/', (req, res) => {
           res.cookie('randomInt',cookieArr);
         }
         else{
-          randomInt = random.exclude(0,movies.length,[0],true)
-        res.cookie('randomInt', JSON.stringify(randomInt));
+          randomInt = [random.exclude(0,movies.length,[0],true)];
+          res.cookie('randomInt', JSON.stringify(randomInt));
         }
 
 
