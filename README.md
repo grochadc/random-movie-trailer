@@ -1,7 +1,7 @@
 # random-movie-trailer
 A webapp that shows you a different trailer from the Rotten Tomatoes Certified Fresh everytime you request the page
 
-##Installation
+## Installation
 
 You know the drill
 
@@ -12,4 +12,13 @@ You know the drill
 
 Then visit http://localhost:3000/ in your browser
 
-Note: If you request the root page with a movie title it will show that instead of a random one. Ex. `http://localhost:3000/?trailer=Dunkirk` (The movie title must be URI encoded)
+## Queries
+
+You can also request the root of the page with the following parameters:
+
+`trailer (string)`: The title of a movie you want to fetch the trailer of.
+`index (number)`:  The index of the movie trailer you want to fetch (based on the movies on the database)
+
+Examples:
+    http://localhost:3000/?trailer=Dunkirk
+    http://localhost:3000/?index=5
