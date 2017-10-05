@@ -4,7 +4,10 @@ const express = require('express');
 const app = express();
 const exphbs = require('express-handlebars');
 var cookieParser = require('cookie-parser');
-const port = 3000;
+
+// set the port of our application
+// process.env.PORT lets the port be set by Heroku
+var port = process.env.PORT || 3000;
 
 var routes = require('./routes');
 
