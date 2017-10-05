@@ -5,6 +5,7 @@ body {
 div#title{
   text-align: center;
   color: #abc;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 div#container {
@@ -33,10 +34,10 @@ div#movie-information{
 
   display: block;
     box-sizing: border-box;
-    position: absolute;
+    font-family: Arial, Helvetica, sans-serif;
     bottom: 0;
     clear: both;
-    width: 100%;
+    width: 560;
     margin: 0;
     padding: 5px;
     background: #456;
