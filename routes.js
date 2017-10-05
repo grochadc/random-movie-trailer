@@ -17,8 +17,6 @@ var random = require('./lib/random');
 router.get('/', (req, res) => {
   console.log('Page requested!');
   console.log('Cookies: ', req.cookies);
-  console.log('Cookies length', Boolean(req.cookies.length));
-  console.log('Boolean cookies', Boolean(req.cookies));
 
   var scrapeMovies = function(){
     return new Promise((resolve, reject) =>{
