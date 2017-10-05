@@ -22,6 +22,8 @@ var random = require('./lib/random');
 router.get('/', (req, res) => {
   console.log('Page requested!');
   console.log('Cookies: ', req.cookies);
+  console.log('Cookies length', Boolean(req.cookies.length));
+  console.log('Boolean cookies', Boolean(req.cookies));
 
   var scrapeMovies = function(){
     return new Promise((resolve, reject) =>{
@@ -63,7 +65,7 @@ router.get('/', (req, res) => {
         var randomInt;
 
         //Make sure the random index has never been requested by the client
-        if(req.cookies.randomInt) {
+        if(req.cookies.length && req.cookies.randomInt) {
           var cookieStr = req.cookies.randomInt;
           var cookieArr = typeof(cookieStr) == 'string' ? JSON.parse(cookieStr) : cookieStr; //Make sure the cookie is an Array
           randomInt = random.exclude(0,movies.length,cookieArr, true);
@@ -71,7 +73,7 @@ router.get('/', (req, res) => {
           res.cookie('randomInt',cookieArr);
         }
         else{
-          randomInt = random.exclude(0,movies.length, true)
+          randomInt = random.exclude(0,movies.length,[0],true)
         res.cookie('randomInt', JSON.stringify(randomInt));
         }
 
