@@ -4,6 +4,7 @@
 		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	<body>
+		<div id="github-ribbon"><a href="https://github.com/grochadc/random-movie-trailer"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/c6286ade715e9bea433b4705870de482a654f78a/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png"></a></div>
 		<div id="title"><h1>Random Movie Trailer</h1></div>
 		<div id="container">
 			<div id="trailer-container">
@@ -13,8 +14,12 @@
 			</div>
 			<div id="movie-information">
 				<h1>{{title}}</h1>
-				<p><div id="scores">Critics Score: {{criticsScore}} Users Score: {{usersScore}}</div></p>
+				<div id="scores"><p>Critics Score: {{criticsScore}} Users Score: {{usersScore}}</p></div>
 			</div>
+		</div>
+		<div class="footer">
+			<p class="reload">The video finished playing? <a href=".">Click here</a> to reload the page and get a new one.</p>
+			<p class="note"> Note: Scores are based on the Rotten Tomatoes Certified Fresh <a href="https://www.rottentomatoes.com/browse/cf-dvd-streaming-all">page</a>.</p>
 		</div>
 	</body>
 </html>
