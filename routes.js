@@ -42,8 +42,8 @@ router.get('/', (req, res) => {
       if(Object.keys(req.query).length > 0){  //true if req.query has values
         if(req.query.index && req.query.trailer) res.send(errorMsg('You can\'t call two parameters at once.'))
         if(req.query.index){
-          var index = req.query.index
-          if(Number(index) && (index<movies.length && index>0)) randomMovie = {title: movies[index].title};
+          var index = Number(req.query.index);
+          if((index || index == 0) && (index<movies.length && index>=0)) randomMovie = {title: movies[index].title, imdbID: movies[index].imdbID, criticsScore: movies[index].criticsScore, usersScore: movies[index].usersScore};
           else res.send(errorMsg('Index is not a number or it\'s out of range.'));
         }
         else if(req.query.trailer){
@@ -57,12 +57,12 @@ router.get('/', (req, res) => {
         if(req.cookies.randomInt) {
           var cookieStr = req.cookies.randomInt;
           var cookieArr = typeof(cookieStr) == 'string' ? JSON.parse(cookieStr) : cookieStr; //Make sure the cookie is an Array
-          randomInt = random.exclude(0,movies.length,cookieArr, true);
+          randomInt = random.exclude(0,movies.length-1,cookieArr, true);
           cookieArr.push(randomInt);
           res.cookie('randomInt',cookieArr);
         }
         else{
-          randomInt = [random.exclude(0,movies.length,[0],true)];
+          randomInt = [random.exclude(0,movies.length-1,[0],true)];
           res.cookie('randomInt', JSON.stringify(randomInt));
         }
 
@@ -82,6 +82,7 @@ router.get('/', (req, res) => {
         {
           if(err) throw res.send(err);
           console.log('Rendering...');
+          console.log(randomMovie);
           res.send(html);
           console.log("Done!");
         });
