@@ -25,6 +25,7 @@
     "movie-trailer": "^1.0.3",
     "nodemon": "^1.12.1",
     "phantom": "^4.0.5",
+    "prompt": "^1.0.0",
     "x-ray": "^2.3.2",
     "x-ray-phantom": "^1.0.1"
   }
