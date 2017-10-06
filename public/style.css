@@ -33,6 +33,11 @@ div#container {
   padding: 2px;
 }
 
+div#movie-title{
+  width:560;
+  word-wrap: break-word;
+}
+
 div#movie-information{
     text-align: center;
     color: #F1ECE4;
