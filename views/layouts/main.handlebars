@@ -28,6 +28,9 @@
 			<div id="movie-information">
 				<h1><span class="glyphicon glyphicon-film"></span> {{title}}</h1>
 				<div id="scores"><p>Critics Score: {{criticsScore}} Users Score: {{usersScore}}</p></div>
+				{{#if imdbID}}
+				<p><a href="https://www.imdb.com/title/{{imdbID}}" target="_blank"> IMDB </a></p>
+				{{/if}}
 			</div>
 		</div>
 		<div class="footer">
