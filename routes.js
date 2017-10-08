@@ -6,10 +6,11 @@ var movieTrailer = require('movie-trailer');
 var Promise = require('bluebird');
 var logs = require('log-switch');
 var fs = require('fs');
+var request = require('request');
 
 var request = require('request');
 
-var debug = false;
+var debug = process.env.NODE_ENV == 'test' ? false : true;
 var random = require('./lib/random');
 
 function errorMsg(msg){
@@ -24,34 +25,41 @@ function errorMsg(msg){
 router.get('/', (req, res) => {
   if(debug) console.log('Page requested!');
   if(debug) console.log('Cookies: ', req.cookies);
+  var file = 'data/moviesRT.json';
 
-  var scrapeMovies = function(){
+  var readDB = (fileName) => {
     return new Promise((resolve, reject) =>{
-      fs.readFile('moviesRT.json', (err,data) =>{
+      fs.readFile(fileName, (err,data) =>{
         if(err) res.send(err);
         var movies = JSON.parse(data);
         resolve(movies);
       });
     });
   };
+  // ^ Resolves with array of objects `movies`
 
-  scrapeMovies().then(
-    movies => {
+  var selectRandom = (movies) => {
+    return new Promise((resolve, reject) => {
       var randomMovie;
 
       /* Don't write or read cookies when a query for trailer is sent
       Instead populate the randomMovie object with the trailer requested */
       if(Object.keys(req.query).length > 0){  //true if req.query has values
-        if(req.query.index && req.query.trailer) res.send(errorMsg('You can\'t call two parameters at once.'))
+        //When calling two parameters
+        if(req.query.index && req.query.trailer) res.send(errorMsg('You can\'t call two parameters at once.'));
+        //When calling index
         if(req.query.index){
           var index = Number(req.query.index);
           if((index || index == 0) && (index<movies.length && index>=0)) randomMovie = {title: movies[index].title, imdbID: movies[index].imdbID, criticsScore: movies[index].criticsScore, usersScore: movies[index].usersScore};
           else res.send(errorMsg('Index is not a number or it\'s out of range.'));
         }
+        //When calling trailer
         else if(req.query.trailer){
           randomMovie = {title: req.query.trailer};
         }
       }
+
+      //When nothing is called
       else{
         var randomInt;
 
@@ -63,6 +71,7 @@ router.get('/', (req, res) => {
           cookieArr.push(randomInt);
           res.cookie('randomInt',cookieArr);
         }
+        //If client doesnt't have cookies just pick a random movie
         else{
           randomInt = [random.exclude(0,movies.length-1,[0],debug)];
           res.cookie('randomInt', JSON.stringify(randomInt));
@@ -70,29 +79,60 @@ router.get('/', (req, res) => {
 
 
         randomMovie = movies[randomInt];
-        var numberArr = [randomInt];
+        randomMovie.index = randomInt
+        resolve(randomMovie);
       }
+    });
+  };
+  // ^ Resolves with object `randomMovie`
 
-      movieTrailer(randomMovie.title, (err, url) =>{
-        if(debug) console.log('Requesting trailer for: ', randomMovie.title, ' with index ', randomInt);
+  var netflixAPI = (randomMovie) => {
+    return new Promise((resolve, reject) => {
+      request('http://netflixroulette.net/api/api.php?title=' + encodeURIComponent(randomMovie.title), (err, response, body) => {
+        if (debug) console.log('Flixroulette requested');
+        var flixMovie = JSON.parse(body);
+        if (flixMovie.errorcode != 404) {
+          Object.assign(randomMovie, flixMovie);
+          resolve(randomMovie); //The new randomMovie now has `show_id`
+        }
+        else{
+          resolve(randomMovie); //Just passing through
+        }
+      });
+    });
+  }
+  // ^ Resolves with object `finalMovie` that has `show_id` if found on netflix
+
+  var requestTrailer = (finalMovie) => {
+
+    return new Promise((resolve, reject) =>{
+      movieTrailer(finalMovie.title, (err, url) =>{
+        if(debug) console.log('Requesting trailer for: ', finalMovie.title, ' with index ', finalMovie.index);
         if(err) res.status(404).send(errorMsg(err));
         else{
           var embedUrl = url.replace('watch?v=','embed/');
           if(debug) console.log('Video ID: ', url.slice(32,url.length));
-          randomMovie.trailerURL = embedUrl; //Add the embed URL to the randomMovie object before rendering it
-          res.render('main',randomMovie,
+          finalMovie.trailerURL = embedUrl; //Add the embed URL to the finalMovie object before rendering it
+          res.render('main',finalMovie,
           (err, html) =>
           {
             if(err) res.send(err);
             if(debug) console.log('Rendering...');
-            if(debug) console.log(randomMovie);
+            if(debug) console.log(finalMovie);
             res.send(html);
             if(debug) console.log("Done!");
           });
         };
       });
-    });
+    })
+  };
+  // ^ End of promise chain renders the page
 
-});
+  readDB(file)
+    .then(selectRandom)
+    .then(netflixAPI)
+    .then(requestTrailer);
+
+}); //Close GET
 
 module.exports = router;
