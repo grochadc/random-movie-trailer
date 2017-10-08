@@ -17,6 +17,7 @@ describe('##App', () => {
         });
     });
 
+/*
     describe('Index:', () =>{
       it('index=0 should send a 200 response', (done) => {
         chai.request('app')
@@ -29,6 +30,7 @@ describe('##App', () => {
           });
       });
     });
+    */
 
   });
 });
