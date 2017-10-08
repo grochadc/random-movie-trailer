@@ -9,9 +9,11 @@ var cookieParser = require('cookie-parser');
 // process.env.PORT lets the port be set by Heroku
 var port = process.env.PORT || 3000;
 
+var logs = require('log-switch');
+
 var routes = require('./routes');
 
-var debug = true;
+var debug = process.env.NODE_ENV == 'test' ? false : true;
 
 
 app.use(express.static('public'));
@@ -26,5 +28,7 @@ app.set('view engine', 'handlebars');
 
 app.listen(port, function () {
   console.log(`Server Starts on ${port}`);
-  if(!debug) logs.disable(); //Disable logging if debug variable is false
+  //if(!debug) logs.disable(); //Disable logging if debug variable is false
 });
+
+module.exports = app; //For testing with Mocha

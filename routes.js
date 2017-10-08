@@ -7,6 +7,8 @@ var Promise = require('bluebird');
 var logs = require('log-switch');
 var fs = require('fs');
 
+var request = require('request');
+
 var debug = false;
 var random = require('./lib/random');
 
