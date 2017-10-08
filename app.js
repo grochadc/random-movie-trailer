@@ -11,7 +11,7 @@ var port = process.env.PORT || 3000;
 
 var logs = require('log-switch');
 
-var routes = require('./routes');
+var routes = require('./controllers/routes');
 
 var debug = process.env.NODE_ENV == 'test' ? false : true;
 

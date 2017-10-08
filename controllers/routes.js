@@ -8,10 +8,8 @@ var logs = require('log-switch');
 var fs = require('fs');
 var request = require('request');
 
-var request = require('request');
-
 var debug = process.env.NODE_ENV == 'test' ? false : true;
-var random = require('./lib/random');
+var random = require('../lib/random');
 
 function errorMsg(msg){
   var message = 'Error: '+msg+ ' Click <a href=".">here</a> to refresh the page.';
@@ -25,7 +23,7 @@ function errorMsg(msg){
 router.get('/', (req, res) => {
   if(debug) console.log('Page requested!');
   if(debug) console.log('Cookies: ', req.cookies);
-  var file = 'data/moviesRT.json';
+  var file = 'models/moviesRT.json';
 
   var readDB = (fileName) => {
     return new Promise((resolve, reject) =>{
