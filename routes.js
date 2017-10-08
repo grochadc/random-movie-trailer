@@ -20,8 +20,8 @@ function errorMsg(msg){
 //===========================//
 
 router.get('/', (req, res) => {
-  console.log('Page requested!');
-  console.log('Cookies: ', req.cookies);
+  if(debug) console.log('Page requested!');
+  if(debug) console.log('Cookies: ', req.cookies);
 
   var scrapeMovies = function(){
     return new Promise((resolve, reject) =>{
@@ -57,12 +57,12 @@ router.get('/', (req, res) => {
         if(req.cookies.randomInt) {
           var cookieStr = req.cookies.randomInt;
           var cookieArr = typeof(cookieStr) == 'string' ? JSON.parse(cookieStr) : cookieStr; //Make sure the cookie is an Array
-          randomInt = random.exclude(0,movies.length-1,cookieArr, true);
+          randomInt = random.exclude(0,movies.length-1,cookieArr, debug);
           cookieArr.push(randomInt);
           res.cookie('randomInt',cookieArr);
         }
         else{
-          randomInt = [random.exclude(0,movies.length-1,[0],true)];
+          randomInt = [random.exclude(0,movies.length-1,[0],debug)];
           res.cookie('randomInt', JSON.stringify(randomInt));
         }
 
@@ -72,20 +72,22 @@ router.get('/', (req, res) => {
       }
 
       movieTrailer(randomMovie.title, (err, url) =>{
-        console.log('Requesting trailer for: ', randomMovie.title, ' with index ', randomInt);
-        if(err) res.send(err);
-        var embedUrl = url.replace('watch?v=','embed/');
-        console.log('Video ID: ', url.slice(32,url.length));
-        randomMovie.trailerURL = embedUrl; //Add the embed URL to the randomMovie object before rendering it
-        res.render('main',randomMovie,
-        (err, html) =>
-        {
-          if(err) throw res.send(err);
-          console.log('Rendering...');
-          console.log(randomMovie);
-          res.send(html);
-          console.log("Done!");
-        });
+        if(debug) console.log('Requesting trailer for: ', randomMovie.title, ' with index ', randomInt);
+        if(err) res.status(404).send(errorMsg(err));
+        else{
+          var embedUrl = url.replace('watch?v=','embed/');
+          if(debug) console.log('Video ID: ', url.slice(32,url.length));
+          randomMovie.trailerURL = embedUrl; //Add the embed URL to the randomMovie object before rendering it
+          res.render('main',randomMovie,
+          (err, html) =>
+          {
+            if(err) res.send(err);
+            if(debug) console.log('Rendering...');
+            if(debug) console.log(randomMovie);
+            res.send(html);
+            if(debug) console.log("Done!");
+          });
+        };
       });
     });
 
