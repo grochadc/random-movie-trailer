@@ -27,7 +27,7 @@ app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 app.listen(port, function () {
-  console.log(`Server Starts on ${port}`);
+  if(debug) console.log(`Server Starts on ${port}`);
   //if(!debug) logs.disable(); //Disable logging if debug variable is false
 });
 
