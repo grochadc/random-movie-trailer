@@ -26,7 +26,9 @@
 				</div>
 			</div>
 			<div id="movie-information">
-				<h1><span class="glyphicon glyphicon-film"></span> {{title}}</h1>
+				<div id="movie-title">
+					<h1><span class="glyphicon glyphicon-film"></span> {{title}}</h1>
+				</div>
 				<div id="scores"><p>Critics Score: {{criticsScore}} Users Score: {{usersScore}}</p></div>
 				{{#if imdbID}}
 				<p><a href="https://www.imdb.com/title/{{imdbID}}" target="_blank"> IMDB </a></p>
