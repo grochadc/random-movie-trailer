@@ -1,11 +1,11 @@
 {
 	"name": "random-movie-trailer",
 	"version": "1.0.0",
-	"description": "Displays movie trailers with good imdb scores",
-	"main": "app.js",
+	"description": "Displays movie trailers of Certified Fresh movies",
+	"main": "src/app.js",
 	"scripts": {
 		"test": "mocha",
-		"start": "nodemon app.js"
+		"start": "nodemon src/app.js"
 	},
 	"keywords": [
 		"youtube",
@@ -22,13 +22,13 @@
 		"imdb-api": "^3.1.1",
 		"movie-trailer": "^1.0.3",
 		"nodemon": "^1.12.1",
-		"puppeteer": "^0.11.0",
 		"rotten-movies": "^0.1.1",
 		"x-ray": "^2.3.2"
 	},
 	"devDependencies": {
 		"chai": "^4.1.2",
 		"chai-http": "^3.0.0",
+		"puppeteer": "^0.11.0",
 		"mocha": "^4.0.1"
 	}
 }

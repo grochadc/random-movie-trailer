@@ -6,6 +6,7 @@ var movieTrailer = require('movie-trailer');
 var Promise = require('bluebird');
 var logs = require('log-switch');
 var fs = require('fs');
+var path = require('path');
 var request = require('request');
 
 var debug = process.env.NODE_ENV == 'test' ? false : true;
@@ -23,7 +24,7 @@ function errorMsg(msg){
 router.get('/', (req, res) => {
   if(debug) console.log('Page requested!');
   if(debug) console.log('Cookies: ', req.cookies);
-  var file = 'models/movies.json';
+  var file = path.join(__dirname,'../models/movies.json');
 
   var readDB = (fileName) => {
     return new Promise((resolve, reject) =>{
@@ -87,6 +88,7 @@ router.get('/', (req, res) => {
   var netflixAPI = (randomMovie) => {
     return new Promise((resolve, reject) => {
       request('http://netflixroulette.net/api/api.php?title=' + encodeURIComponent(randomMovie.title), (err, response, body) => {
+        if(err) throw err;
         if (debug) console.log('Flixroulette requested');
         var flixMovie = JSON.parse(body);
         if (flixMovie.errorcode != 404) {

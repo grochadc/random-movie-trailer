@@ -10,20 +10,27 @@ var cookieParser = require('cookie-parser');
 var port = process.env.PORT || 3000;
 
 var logs = require('log-switch');
+var path = require('path');
 
 var routes = require('./controllers/routes');
 
 var debug = process.env.NODE_ENV == 'test' ? false : true;
 
 
-app.use(express.static('public'));
+const publicFolder = path.join(__dirname, 'public/')
+app.use(express.static(publicFolder));
 app.use(cookieParser());
 app.use('/', routes);
 
 //app.use(cookieParser());
 
 //View engine
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+const viewsPath = path.join(__dirname,'views/');
+app.set('views', viewsPath);
+app.engine('handlebars', exphbs({
+  defaultLayout: 'main',
+  layoutsDir: viewsPath + '/layouts'
+}));
 app.set('view engine', 'handlebars');
 
 app.listen(port, function () {
