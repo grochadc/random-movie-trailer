@@ -23,7 +23,7 @@ function errorMsg(msg){
 router.get('/', (req, res) => {
   if(debug) console.log('Page requested!');
   if(debug) console.log('Cookies: ', req.cookies);
-  var file = 'models/moviesRT.json';
+  var file = 'models/movies.json';
 
   var readDB = (fileName) => {
     return new Promise((resolve, reject) =>{
