@@ -1,34 +1,34 @@
 {
-  "name": "random-movie-trailer",
-  "version": "1.0.0",
-  "description": "Displays movie trailers with good imdb scores",
-  "main": "app.js",
-  "scripts": {
-    "test": "mocha",
-    "start": "nodemon app.js"
-  },
-  "keywords": [
-    "youtube",
-    "trailer",
-    "movies"
-  ],
-  "author": "Gonzalo Rocha",
-  "license": "ISC",
-  "dependencies": {
-    "bluebird": "^3.5.0",
-    "cookie-parser": "^1.4.3",
-    "express": "^4.16.1",
-    "express-handlebars": "^3.0.0",
-    "imdb-api": "^3.1.1",
-    "movie-trailer": "^1.0.3",
-    "nodemon": "^1.12.1",
-    "puppeteer": "^0.11.0",
-    "rotten-movies": "^0.1.1",
-    "x-ray": "^2.3.2",
-  },
-  "devDependencies": {
-    "chai": "^4.1.2",
-    "chai-http": "^3.0.0",
-    "mocha": "^4.0.1"
-  }
+	"name": "random-movie-trailer",
+	"version": "1.0.0",
+	"description": "Displays movie trailers with good imdb scores",
+	"main": "app.js",
+	"scripts": {
+		"test": "mocha",
+		"start": "nodemon app.js"
+	},
+	"keywords": [
+		"youtube",
+		"trailer",
+		"movies"
+	],
+	"author": "Gonzalo Rocha",
+	"license": "ISC",
+	"dependencies": {
+		"bluebird": "^3.5.0",
+		"cookie-parser": "^1.4.3",
+		"express": "^4.16.1",
+		"express-handlebars": "^3.0.0",
+		"imdb-api": "^3.1.1",
+		"movie-trailer": "^1.0.3",
+		"nodemon": "^1.12.1",
+		"puppeteer": "^0.11.0",
+		"rotten-movies": "^0.1.1",
+		"x-ray": "^2.3.2"
+	},
+	"devDependencies": {
+		"chai": "^4.1.2",
+		"chai-http": "^3.0.0",
+		"mocha": "^4.0.1"
+	}
 }
