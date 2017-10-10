@@ -1,10 +1,9 @@
-var express = require('express')
-var router = express.Router()
+var express = require('express');
+var router = express.Router();
 
 var movieTrailer = require('movie-trailer');
 
 var Promise = require('bluebird');
-var logs = require('log-switch');
 var fs = require('fs');
 var path = require('path');
 var request = require('request');
@@ -27,8 +26,8 @@ router.get('/', (req, res) => {
   var file = path.join(__dirname,'../models/movies.json');
 
   var readDB = (fileName) => {
-    return new Promise((resolve, reject) =>{
-      fs.readFile(fileName, (err,data) =>{
+    return new Promise((resolve, reject) => {
+      fs.readFile(fileName, (err,data) => {
         if(err) res.send(err);
         var movies = JSON.parse(data);
         resolve(movies);
@@ -76,14 +75,13 @@ router.get('/', (req, res) => {
           res.cookie('randomInt', JSON.stringify(randomInt));
         }
 
-
         randomMovie = movies[randomInt];
-        randomMovie.index = randomInt
+        randomMovie.index = randomInt;
         resolve(randomMovie);
       }
     });
   };
-  // ^ Resolves with object `randomMovie`
+  // ^ Resolves with object randomMovie
 
   var netflixAPI = (randomMovie) => {
     return new Promise((resolve, reject) => {
@@ -93,15 +91,15 @@ router.get('/', (req, res) => {
         var flixMovie = JSON.parse(body);
         if (flixMovie.errorcode != 404) {
           Object.assign(randomMovie, flixMovie);
-          resolve(randomMovie); //The new randomMovie now has `show_id`
+          resolve(randomMovie); //The new randomMovie now has show_id
         }
         else{
           resolve(randomMovie); //Just passing through
         }
       });
     });
-  }
-  // ^ Resolves with object `finalMovie` that has `show_id` if found on netflix
+  };
+  // ^ Resolves with object `finalMovie` that has show_id if found on netflix
 
   var requestTrailer = (finalMovie) => {
 
@@ -122,9 +120,9 @@ router.get('/', (req, res) => {
             res.send(html);
             if(debug) console.log("Done!");
           });
-        };
+        }
       });
-    })
+    });
   };
   // ^ End of promise chain renders the page
 

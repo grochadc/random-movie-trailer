@@ -3,7 +3,9 @@ const should = chai.should();
 const expect = chai.expect;
 const assert = chai.assert;
 
-const random = require('../lib/random');
+const path = require('path');
+
+const random = require(path.join(__dirname,'../src/lib/random'));
 
 describe('Random lib: ', ()=>{
 

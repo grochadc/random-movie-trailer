@@ -2,7 +2,8 @@ process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
 const chaiHTTP = require('chai-http');
-const app = require('../app');
+const path = require('path');
+const app = require(path.join(__dirname,'../src/app'));
 const should = chai.should();
 
 chai.use(chaiHTTP);
