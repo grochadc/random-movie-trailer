@@ -2,8 +2,6 @@ var express = require('express');
 var router = express.Router();
 
 var movieTrailer = require('movie-trailer');
-
-var Promise = require('bluebird');
 var fs = require('fs');
 var path = require('path');
 var request = require('request');
