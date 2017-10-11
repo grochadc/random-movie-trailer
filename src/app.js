@@ -16,7 +16,7 @@ var routes = require(path.join(__dirname, 'controllers/routes'));
 var debug = process.env.NODE_ENV == 'test' ? false : true;
 
 
-const publicFolder = path.join(__dirname, 'public/')
+const publicFolder = path.join(__dirname, 'public/');
 app.use(express.static(publicFolder));
 app.use(cookieParser());
 app.use('/', routes);
