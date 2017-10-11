@@ -1,5 +1,5 @@
 const express = require('express');
-
+const compression = require('compression');
 //Define app and settings
 const app = express();
 const exphbs = require('express-handlebars');
@@ -18,6 +18,7 @@ var debug = process.env.NODE_ENV == 'test' ? false : true;
 
 const publicFolder = path.join(__dirname, 'public/');
 app.use(express.static(publicFolder));
+app.use(compression());
 app.use(cookieParser());
 app.use('/', routes);
 
