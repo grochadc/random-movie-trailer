@@ -2,7 +2,11 @@ const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs');
 
-(async () =>{
+//Scraping solution to fill the model movies.json with data from rottentomatoes
+
+
+(async () => {
+  /* jshint ignore:start */
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto('https://www.rottentomatoes.com/browse/cf-dvd-streaming-all');
@@ -20,8 +24,8 @@ const fs = require('fs');
           title: $(movie).find('h3.movieTitle').text(),
           usersScore: $(scores[0]).text(),
         	criticsScore: $(scores[1]).text()
-        }
-    })
+        };
+    });
 
     return moviesInfo;
   });
@@ -33,3 +37,4 @@ const fs = require('fs');
 
   await browser.close();
 })();
+      /* jshint ignore:end */
