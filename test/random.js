@@ -5,7 +5,7 @@ const assert = chai.assert;
 
 const path = require('path');
 
-const random = require(path.join(__dirname,'../src/lib/random'));
+const random = require(path.join(__dirname,'../dist/lib/random'));
 
 describe('Random lib: ', ()=>{
 
