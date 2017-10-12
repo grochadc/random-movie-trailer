@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
   var readDB = (fileName) => {
     return new Promise((resolve, reject) => {
       fs.readFile(fileName, (err,data) => {
-        if(err) res.send(err);
+        if(err) reject(err);
         var movies = JSON.parse(data);
         resolve(movies);
       });
@@ -47,7 +47,7 @@ router.get('/', (req, res) => {
         if(req.query.index){
           var index = Number(req.query.index);
           if((index || index == 0) && (index<movies.length && index>=0)) randomMovie = {title: movies[index].title, imdbID: movies[index].imdbID, criticsScore: movies[index].criticsScore, usersScore: movies[index].usersScore};
-          else res.send(errorMsg('Index is not a number or it\'s out of range.'));
+          else reject(errorMsg('Index is not a number or it\'s out of range.'));
         }
         //When calling trailer
         else if(req.query.trailer){
@@ -84,7 +84,7 @@ router.get('/', (req, res) => {
   var netflixAPI = (randomMovie) => {
     return new Promise((resolve, reject) => {
       request('http://netflixroulette.net/api/api.php?title=' + encodeURIComponent(randomMovie.title), (err, response, body) => {
-        if(err) throw err;
+        if(err) reject(err);
         if (debug) console.log('Flixroulette requested');
         var flixMovie = JSON.parse(body);
         if (flixMovie.errorcode != 404) {
@@ -104,7 +104,7 @@ router.get('/', (req, res) => {
     return new Promise((resolve, reject) =>{
       movieTrailer(finalMovie.title, (err, url) =>{
         if(debug) console.log('Requesting trailer for: ', finalMovie.title, ' with index ', finalMovie.index);
-        if(err) res.status(404).send(errorMsg(err));
+        if(err) reject(errorMsg(err));
         else{
           var embedUrl = url.replace('watch?v=','embed/');
           if(debug) console.log('Video ID: ', url.slice(32,url.length));
@@ -112,7 +112,7 @@ router.get('/', (req, res) => {
           res.render('main',finalMovie,
           (err, html) =>
           {
-            if(err) res.send(err);
+            if(err) rject(err);
             if(debug) console.log('Rendering...');
             if(debug) console.log(finalMovie);
             res.send(html);
@@ -126,8 +126,11 @@ router.get('/', (req, res) => {
 
   readDB(file)
     .then(selectRandom)
+      .catch((err) => res.status(500).send(errorMsg(err)))
     .then(netflixAPI)
-    .then(requestTrailer);
+      .catch((err) => res.status(500).send(errorMsg(err)))
+    .then(requestTrailer)
+      .catch((err) => res.status(500).send(errorMsg(err)));
 
 }); //Close GET
 
