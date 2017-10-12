@@ -4,8 +4,8 @@ const expect = chai.expect;
 const assert = chai.assert;
 
 const path = require('path');
-
-const random = require(path.join(__dirname,'../src/lib/random'));
+const folder = (process.env.NODE_ENV == 'prod' ? '../dist/' : '../src/') ;
+const random = require(path.join(__dirname, folder ,'lib/random'));
 
 describe('Random lib: ', ()=>{
 
@@ -23,7 +23,7 @@ describe('Random lib: ', ()=>{
   describe('min = 0, max = 10, arr = []', ()=>{
     it('should return a number', () => {
       random.exclude(0,10,[]).should.be.a('number');
-    })
+    });
   });
 
   describe('min = 0, max = 10, logging = true', ()=> {
@@ -40,7 +40,7 @@ describe('Random lib: ', ()=>{
 
   describe('min = 0, max = 10, arr = [-1]', () =>{
     it('should throw a positive number', ()=>{
-      assert.isAtLeast(random.exclude(0,10,[-1]),0)
+      assert.isAtLeast(random.exclude(0,10,[-1]),0);
     });
   });
 });
