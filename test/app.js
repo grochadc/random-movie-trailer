@@ -1,10 +1,5 @@
 const chai = require('chai');
 const chaiHTTP = require('chai-http');
-<<<<<<< HEAD
-const path = require('path');
-const app = require(path.join(__dirname,'../dist/app'));
-=======
->>>>>>> master
 const should = chai.should();
 
 const env = process.env.NODE_ENV;

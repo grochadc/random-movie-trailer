@@ -4,13 +4,8 @@ const expect = chai.expect;
 const assert = chai.assert;
 
 const path = require('path');
-<<<<<<< HEAD
-
-const random = require(path.join(__dirname,'../dist/lib/random'));
-=======
 const folder = (process.env.NODE_ENV == 'prod' ? '../dist/' : '../src/') ;
 const random = require(path.join(__dirname, folder ,'lib/random'));
->>>>>>> master
 
 describe('Random lib: ', ()=>{
 

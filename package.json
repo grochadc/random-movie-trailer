@@ -5,11 +5,7 @@
 	"main": "src/app.js",
 	"scripts": {
 		"test": "mocha",
-<<<<<<< HEAD
-		"start": "nodemon dist/app.js"
-=======
 		"start": "if [ $NODE_ENV = \"prod\" ]; then echo \"App production mode\" && node dist/app.js ; else echo \"App development mode\" && nodemon src/app.js; fi"
->>>>>>> master
 	},
 	"repository": {
 		"type": "git",
