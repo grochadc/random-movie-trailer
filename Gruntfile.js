@@ -2,6 +2,18 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec',
+          quiet: false, // Optionally suppress output to standard out (defaults to false)
+          clearRequireCache: false, // Optionally clear the require cache before running tests (defaults to false)
+          clearCacheFilter: (key) => true, // Optionally defines which files should keep in cache
+          noFail: false // Optionally set to not fail on failed tests (will still fail on other errors)
+        },
+        src: ['test/**/*.js']
+      }
+    },
     uglify: {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
@@ -17,10 +29,11 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-replace');
 
-  grunt.registerTask('default', ['uglify','copy']);
+  grunt.registerTask('default', ['mochaTest','uglify','copy']);
 
 };

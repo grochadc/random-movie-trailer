@@ -94,7 +94,7 @@ router.get('/', (req, res) => {
           res.render('main',finalMovie,
           (err, html) =>
           {
-            if(err) rject(err);
+            if(err) reject(err);
             if(debug) console.log('Rendering...');
             if(debug) console.log(finalMovie);
             res.send(html);

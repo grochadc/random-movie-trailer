@@ -1,8 +1,8 @@
+//Scraping solution to fill the model movies.json with data from rottentomatoes
+
 const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs');
-
-//Scraping solution to fill the model movies.json with data from rottentomatoes
 
 
 (async () => {
