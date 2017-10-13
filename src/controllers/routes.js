@@ -81,24 +81,6 @@ router.get('/', (req, res) => {
   };
   // ^ Resolves with object randomMovie
 
-  var netflixAPI = (randomMovie) => {
-    return new Promise((resolve, reject) => {
-      request('http://netflixroulette.net/api/api.php?title=' + encodeURIComponent(randomMovie.title), (err, response, body) => {
-        if(err) reject(err);
-        if (debug) console.log('Flixroulette requested');
-        var flixMovie = JSON.parse(body);
-        if (flixMovie.errorcode != 404) {
-          Object.assign(randomMovie, flixMovie);
-          resolve(randomMovie); //The new randomMovie now has show_id
-        }
-        else{
-          resolve(randomMovie); //Just passing through
-        }
-      });
-    });
-  };
-  // ^ Resolves with object `finalMovie` that has show_id if found on netflix
-
   var requestTrailer = (finalMovie) => {
 
     return new Promise((resolve, reject) =>{
@@ -126,8 +108,6 @@ router.get('/', (req, res) => {
 
   readDB(file)
     .then(selectRandom)
-      .catch((err) => res.status(500).send(errorMsg(err)))
-    .then(netflixAPI)
       .catch((err) => res.status(500).send(errorMsg(err)))
     .then(requestTrailer)
       .catch((err) => res.status(500).send(errorMsg(err)));
