@@ -50,12 +50,9 @@ div#movie-information{
 div.footer{
     color: #abc;
 }
-p.reload{
-  text-align: center;
-}
 
 p.note{
-  font-size: 10;
+  font-size: 14;
   text-align: center;
 }
 

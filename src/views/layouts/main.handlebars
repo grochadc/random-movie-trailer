@@ -21,9 +21,7 @@
 		</div>
 		<div id="container">
 			<div id="trailer-container">
-				<div>
-					<iframe width="560" height="315" src="{{trailerURL}}" frameborder="0" allowfullscreen></iframe>
-				</div>
+					<div id="player"></div>
 			</div>
 			<div id="movie-information">
 				<div id="movie-title">
@@ -39,8 +37,44 @@
 			</div>
 		</div>
 		<div class="footer">
-			<p class="reload">The video finished playing? <a href=".">Click here</a> to reload the page and get a new one.</p>
 			<p class="note"> Note: Scores are based on the Rotten Tomatoes Certified Fresh <a href="https://www.rottentomatoes.com/browse/cf-dvd-streaming-all">page</a>.</p>
 		</div>
+
+		<script>
+		var tag = document.createElement('script');
+		tag.src = "https://www.youtube.com/iframe_api"
+
+		var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+		var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: '{{videoID}}',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+			function onPlayerReady(event) {
+        event.target.playVideo();
+      }
+
+			var done = false;
+			function onPlayerStateChange(event) {
+				if (event.data == 0) {
+					stopVideo();
+					location.reload();
+				}
+			}
+			function stopVideo() {
+				player.stopVideo();
+			}
+
+		</script>
 	</body>
 </html>

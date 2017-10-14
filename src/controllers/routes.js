@@ -90,6 +90,7 @@ router.get('/', (req, res) => {
         else{
           var embedUrl = url.replace('watch?v=','embed/');
           if(debug) console.log('Video ID: ', url.slice(32,url.length));
+          finalMovie.videoID = url.slice(32,url.length);
           finalMovie.trailerURL = embedUrl; //Add the embed URL to the finalMovie object before rendering it
           res.render('main',finalMovie,
           (err, html) =>
