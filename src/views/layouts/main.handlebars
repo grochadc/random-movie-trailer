@@ -27,7 +27,11 @@
 			</div>
 			<div id="movie-information">
 				<div id="movie-title">
+					{{#if letterboxd}}
+					<a href="https://letterboxd.com/film/{{letterboxd}}" target="_blank">
+					{{/if}}
 					<h1><span class="glyphicon glyphicon-film"></span> {{title}}</h1>
+				</a>
 				</div>
 				<div id="scores"><p>Critics Score: {{criticsScore}} Users Score: {{usersScore}}</p></div>
 				{{#if imdbID}}

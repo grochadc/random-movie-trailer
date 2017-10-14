@@ -9,7 +9,8 @@ You (may) know the drill:
     git clone https://github.com/grochadc/random-movie-trailer.git
     cd random-movie-trailer
     npm install
-    node app.js
+    grunt
+    npm start
 
 Then visit http://localhost:3000/ in your browser
 

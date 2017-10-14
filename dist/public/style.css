@@ -47,6 +47,10 @@ div#movie-information{
     border-bottom-left-radius: 4px;
 }
 
+div#movie-information a{
+  color: inherit;
+}
+
 div.footer{
     color: #abc;
 }
