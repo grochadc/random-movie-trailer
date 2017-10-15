@@ -43,4 +43,27 @@ describe('Random lib: ', ()=>{
       assert.isAtLeast(random.exclude(0,10,[-1]),0);
     });
   });
+
+  describe('min = 0, max = 10, arr = undefined', () =>{
+    it('should throw any number', ()=>{
+      random.exclude(0,10,[undefined]).should.be.a('number');
+    });
+  });
+
+  describe('min = 0, max = 10, arr = null', () =>{
+    it('should throw any number', ()=>{
+      random.exclude(0,10,[null]).should.be.a('number');
+    });
+  });
+
+  describe('min = 0, max = null, arr = '+arr, () =>{
+    it('should throw any number', ()=>{
+      random.exclude(0,null,[arr]).should.be.a('number');
+    });
+  });
+  describe('min = 0, max = undefined, arr = '+arr, () =>{
+    it('should throw any number', ()=>{
+      random.exclude(0,undefined,[arr]).should.be.a('number');
+    });
+  });
 });
