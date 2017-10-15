@@ -8,7 +8,7 @@ module.exports = {
         logging = arr; //set logging
         arr = [-1]; //and instead set arr to something so the function has something to work with
       }
-      if (typeof(arr) != 'object') throw new TypeError('Error: arg3 is not an array'); //Log an error if arr is anything other than an Object
+      if (typeof(arr) != 'object') throw new TypeError('Error: arg3 is not an array. It\'s a '+typeof(arr)); //Log an error if arr is anything other than an Object
 
       var num = Math.floor(Math.random() * (max - min + 1)) + min;
 
