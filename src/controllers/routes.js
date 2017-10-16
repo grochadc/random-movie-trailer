@@ -31,13 +31,14 @@ router.get('/', (req, res) => {
     return new Promise((resolve, reject) => {
       fs.readFile(fileName, (err,data) => {
         if(err) reject(err);
-        moviesDB = JSON.parse(data);
+        moviesDB = JSON.parse(data); //Here's an array
         console.log('File read');
+
         resolve(moviesDB);
       });
     });
   };
-  // ^ Resolves with an array of objects `movies`
+  // ^ Resolves with an object that contains an array with movies, isfound:false
 
   var parseQuery = (movies) => {
     return new Promise((resolve, reject) => {
@@ -47,26 +48,21 @@ router.get('/', (req, res) => {
         //When calling two parameters
         if(req.query.index && req.query.trailer) reject('You can\'t call two parameters at once.');
         //When calling index
-        if(req.query.index){
+        else if(req.query.index){
           var index = Number(req.query.index);
           console.log('Calling index ',index);
-          if((index || index == 0) && (index<movies.length && index>=0)){
-            randomMovie = {
-              title: movies[index].title,
-              imdbID: movies[index].imdbID,
-              criticsScore: movies[index].criticsScore,
-              usersScore: movies[index].usersScore,
-              index: index
-              };
+          if(index<movies.length && index>=0){
+            movie = movies[index];
+            movie.index = index;
           }
           else reject(errorMsg('Index is not a number or it\'s out of range.'));
-            console.log('Requested: ', randomMovie);
+            console.log('Requested: ', movie);
           }
         //When calling trailer
-        if(req.query.trailer){
-          randomMovie = {title: req.query.trailer};
+        else if(req.query.trailer){
+          movie = {title: req.query.trailer};
         }
-        else resolve(randomMovie);
+        resolve([movie]); //Pass the result as a one item array
       }
       resolve(movies); //If no query is called just pass the movies through
      });
@@ -79,22 +75,13 @@ router.get('/', (req, res) => {
       var randomMovie;
       var randomInt;
 
-      //If movies is not an array and first element is title, it means there is only one movie
-      if(!isArray(movies)) {
-        console.log('Movies is an obj');
-        var firstEl = Object.keys(movies)[0];
-        console.log('Movies firstEl is ', firstEl);
-        console.log('Is title? ', Boolean(firstEl == 'title'), 'Is elements? ', Boolean(firstEl == 'elements'));
-        if(firstEl == 'title') {
-          randomMovie = movies;
-          resolve(randomMovie);
-        }
-        else if(firstEl == 'elements') {
-          found = movies.found;
-          movies = movies.elements;
-          if(!found) req.query = {};
-        }
+      //If movies array is only one in length pass through
+      if(movies.length == 1) {
+        movie = movies[0];
+        movie.letterboxd = movie.title.replace(/\s+/g, '-').toLowerCase();
+        resolve(movie);
       }
+      else {
         //Make sure the random index has never been requested by the client
         if(req.cookies.randomInt) {
           var cookieStr = req.cookies.randomInt;
@@ -110,25 +97,23 @@ router.get('/', (req, res) => {
         }
 
         randomMovie = movies[randomInt];
-        console.log('randomMovie ', randomMovie);
         randomMovie.index = randomInt;
         randomMovie.letterboxd = randomMovie.title.replace(/\s+/g, '-').toLowerCase(); //Move this to the render function
         resolve(randomMovie);
-      });
+      }
+    });
   };
   // ^ Resolves with object randomMovie
 
-  var requestTrailer = (finalMovie) => {
+  var requestTrailer = (randomMovie) => {
     return new Promise((resolve, reject) => {
-      movieTrailer(finalMovie.title, (err, url) => {
-        if(debug) console.log('Requesting trailer for: ', finalMovie.title, ' with index ', finalMovie.index);
+      movieTrailer(randomMovie.title, (err, url) => {
+        if(debug) console.log('Requesting trailer for: ', randomMovie.title, ' with index ', randomMovie.index);
         if(err) reject(err);
         else {
-          finalMovie.videoID = url.slice(32,url.length);
-          if(debug) console.log('Video ID: ', url.slice(32,url.length));
-          console.log('requestTrailer resolving ', finalMovie);
-          resolve(finalMovie);
-
+          randomMovie.videoID = url.slice(32,url.length);
+          if(debug) console.log('Video ID: ', randomMovie.videoID);
+          resolve(randomMovie);
         }
       });
     });
@@ -150,12 +135,9 @@ router.get('/', (req, res) => {
   //^ Ends promise chain and renders the page
 
 
-  var selectMovie = (isfound) => {
+  var selectMovie = () => {
     console.log('selectMovie() called');
-    selectRandom({
-      elements: moviesDB,
-      found: false
-    })
+    selectRandom(moviesDB)
       .then(requestTrailer)
         .catch((err) => {
           if(err == 'Got error: No results found') throw new Error(err);
@@ -172,7 +154,7 @@ router.get('/', (req, res) => {
     .then(requestTrailer)
       .catch((err) => {
         if(err == 'Got error: No results found') {
-          selectMovie(false);
+          selectMovie();
           throw new Error(err);
         }
       })
