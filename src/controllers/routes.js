@@ -135,13 +135,16 @@ router.get('/', (req, res) => {
   //^ Ends promise chain and renders the page
 
 
-  var selectMovie = () => {
+  var selectMovie = (movies) => {
     console.log('selectMovie() called');
-    selectRandom(moviesDB)
+    selectRandom(movies)
       .then(requestTrailer)
-        .catch((err) => {
-          if(err == 'Got error: No results found') throw new Error(err);
-        })
+      .catch((err) => {
+        if(err == 'Got error: No results found') {
+          selectMovie(moviesDB);
+          throw new Error(err);
+        }
+      })
           .then(renderMovie)
             .catch((err) => console.error(err));
   };
@@ -149,17 +152,7 @@ router.get('/', (req, res) => {
   readDB(file)
     .then(parseQuery)
       .catch((err) => console.error(err))
-    .then(selectRandom)
-      .catch((err) => console.error(err))
-    .then(requestTrailer)
-      .catch((err) => {
-        if(err == 'Got error: No results found') {
-          selectMovie();
-          throw new Error(err);
-        }
-      })
-        .then(renderMovie)
-          .catch((err) => console.error(err));
+    .then(selectMovie);
 
 }); //Close GET
 
