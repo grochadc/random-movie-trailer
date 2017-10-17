@@ -1,8 +1,8 @@
+//Scraping solution to fill the model movies.json with data from rottentomatoes
+
 const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs');
-
-//Scraping solution to fill the model movies.json with data from rottentomatoes
 
 
 (async () => {
@@ -10,6 +10,8 @@ const fs = require('fs');
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto('https://www.rottentomatoes.com/browse/cf-dvd-streaming-all');
+
+  await page.click('button.mb-load-btn');
 
   const movies = await page.$eval('div.mb-movies', el => {
 

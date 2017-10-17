@@ -1,14 +1,14 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var movieTrailer = require('movie-trailer');
-var fs = require('fs');
-var path = require('path');
-var request = require('request');
+const movieTrailer = require('movie-trailer');
+const fs = require('fs');
+const path = require('path');
+const request = require('request');
 
 var debug = process.env.NODE_ENV == 'test' ? false : true;
 
-var random = require(path.join(__dirname, '../lib/random'));
+const random = require(path.join(__dirname, '../lib/random'));
 const isArray = require('../lib/is-array');
 
 function errorMsg(msg){
@@ -23,11 +23,11 @@ function errorMsg(msg){
 router.get('/', (req, res) => {
   if(debug) console.log('Page requested!');
   if(debug) console.log('Cookies: ', req.cookies);
-  var file = path.join(__dirname,'../models/movies.json');
+  const file = path.join(__dirname,'../models/movies.json');
 
   var moviesDB; //Populate this variable the first time the model is read
 
-  var readDB = (fileName) => {
+  const readDB = (fileName) => {
     return new Promise((resolve, reject) => {
       fs.readFile(fileName, (err,data) => {
         if(err) reject(err);
@@ -40,7 +40,7 @@ router.get('/', (req, res) => {
   };
   // ^ Resolves with an object that contains an array with movies, isfound:false
 
-  var parseQuery = (movies) => {
+  const parseQuery = (movies) => {
     return new Promise((resolve, reject) => {
       const queries = Object.keys(req.query).length;
       console.log('Parsing ', queries ,'queries');
@@ -69,11 +69,11 @@ router.get('/', (req, res) => {
   };
   //^ When a query is called resolves a specific movie or if no query just passes the movies array
 
-  var selectRandom = (movies) => {
+  const selectRandom = (movies) => {
     return new Promise((resolve, reject) => {
 
-      var randomMovie;
-      var randomInt;
+      let randomMovie;
+      let randomInt;
 
       //If movies array is only one in length pass through
       if(movies.length == 1) {
@@ -84,8 +84,8 @@ router.get('/', (req, res) => {
       else {
         //Make sure the random index has never been requested by the client
         if(req.cookies.randomInt) {
-          var cookieStr = req.cookies.randomInt;
-          var cookieArr = typeof(cookieStr) == 'string' ? JSON.parse(cookieStr) : cookieStr; //Make sure the cookie is an Array
+          let cookieStr = req.cookies.randomInt;
+          let cookieArr = typeof(cookieStr) == 'string' ? JSON.parse(cookieStr) : cookieStr; //Make sure the cookie is an Array
           randomInt = random.exclude(0,movies.length-1,cookieArr, debug);
           cookieArr.push(randomInt);
           res.cookie('randomInt',cookieArr);
@@ -105,7 +105,7 @@ router.get('/', (req, res) => {
   };
   // ^ Resolves with object randomMovie
 
-  var requestTrailer = (randomMovie) => {
+  const requestTrailer = (randomMovie) => {
     return new Promise((resolve, reject) => {
       movieTrailer(randomMovie.title, (err, url) => {
         if(debug) console.log('Requesting trailer for: ', randomMovie.title, ' with index ', randomMovie.index);
@@ -120,7 +120,7 @@ router.get('/', (req, res) => {
   };
   // ^ Resolves with object finalMovie
 
-  var renderMovie = (finalMovie) => {
+  const renderMovie = (finalMovie) => {
     console.log('renderMovie(finalMovie) ',finalMovie);
     res.render('main',finalMovie,
     (err, html) =>
@@ -135,7 +135,7 @@ router.get('/', (req, res) => {
   //^ Ends promise chain and renders the page
 
 
-  var selectMovie = (movies) => {
+  const selectMovie = (movies) => {
     console.log('selectMovie() called');
     selectRandom(movies)
       .then(requestTrailer)
