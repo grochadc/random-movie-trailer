@@ -1,7 +1,11 @@
 [{
-  "title": "Alien: Covenant",
-  "usersScore": "70%",
-  "criticsScore": "57%"
+  "title": "Spider-Man: Homecoming",
+  "usersScore": "92%",
+  "criticsScore": "89%"
+}, {
+  "title": "Girls Trip",
+  "usersScore": "89%",
+  "criticsScore": "83%"
 }, {
   "title": "Captain Underpants: The First Epic Movie (Captain Underpants)",
   "usersScore": "87%",
@@ -16,12 +20,12 @@
   "criticsScore": "89%"
 }, {
   "title": "First They Killed My Father",
-  "usersScore": "90%",
+  "usersScore": "88%",
   "criticsScore": "83%"
 }, {
   "title": "Baby Driver",
   "usersScore": "93%",
-  "criticsScore": "88%"
+  "criticsScore": "87%"
 }, {
   "title": "Demon",
   "usersScore": "91%",
@@ -33,10 +37,10 @@
 }, {
   "title": "Colossal",
   "usersScore": "80%",
-  "criticsScore": "60%"
+  "criticsScore": "59%"
 }, {
   "title": "Certain Women",
-  "usersScore": "93%",
+  "usersScore": "92%",
   "criticsScore": "51%"
 }, {
   "title": "Godzilla Resurgence (Shin Godzilla)",
@@ -47,25 +51,29 @@
   "usersScore": "76%",
   "criticsScore": "47%"
 }, {
+  "title": "The Meyerowitz Stories (New and Selected)",
+  "usersScore": "93%",
+  "criticsScore": "84%"
+}, {
   "title": "Raw",
   "usersScore": "90%",
   "criticsScore": "77%"
 }, {
   "title": "The Wedding Plan",
   "usersScore": "86%",
-  "criticsScore": "66%"
+  "criticsScore": "65%"
 }, {
   "title": "Maudie",
   "usersScore": "88%",
-  "criticsScore": "93%"
+  "criticsScore": "92%"
 }, {
   "title": "Heal the Living (Réparer les vivants)",
   "usersScore": "90%",
-  "criticsScore": "68%"
+  "criticsScore": "70%"
 }, {
-  "title": "Wakefield",
-  "usersScore": "74%",
-  "criticsScore": "57%"
+  "title": "Lady Macbeth",
+  "usersScore": "89%",
+  "criticsScore": "72%"
 }, {
   "title": "The Exception (The Kaiser's Last Kiss)",
   "usersScore": "76%",
@@ -73,31 +81,23 @@
 }, {
   "title": "Citizen Jane: Battle for the City",
   "usersScore": "94%",
-  "criticsScore": "62%"
-}, {
-  "title": "Their Finest",
-  "usersScore": "88%",
-  "criticsScore": "73%"
+  "criticsScore": "61%"
 }, {
   "title": "The Beguiled",
   "usersScore": "78%",
-  "criticsScore": "51%"
+  "criticsScore": "50%"
 }, {
   "title": "The Big Sick",
   "usersScore": "98%",
   "criticsScore": "89%"
 }, {
-  "title": "The Incredible Jessica James",
-  "usersScore": "85%",
-  "criticsScore": "66%"
-}, {
   "title": "The Little Hours",
   "usersScore": "77%",
-  "criticsScore": "54%"
+  "criticsScore": "53%"
 }, {
   "title": "A Ghost Story",
   "usersScore": "91%",
-  "criticsScore": "67%"
+  "criticsScore": "66%"
 }, {
   "title": "The Hero",
   "usersScore": "77%",
@@ -109,17 +109,41 @@
 }, {
   "title": "Band Aid",
   "usersScore": "85%",
-  "criticsScore": "72%"
-}, {
-  "title": "Killing Ground",
-  "usersScore": "77%",
-  "criticsScore": "43%"
+  "criticsScore": "73%"
 }, {
   "title": "It Comes At Night",
   "usersScore": "89%",
   "criticsScore": "43%"
 }, {
+  "title": "The Midwife (Sage femme)",
+  "usersScore": "86%",
+  "criticsScore": "82%"
+}, {
+  "title": "Brawl in Cell Block 99",
+  "usersScore": "93%",
+  "criticsScore": "75%"
+}, {
   "title": "Gerald's Game",
-  "usersScore": "91%",
+  "usersScore": "89%",
   "criticsScore": "78%"
+}, {
+  "title": "Alien: Covenant",
+  "usersScore": "70%",
+  "criticsScore": "57%"
+}, {
+  "title": "Kong: Skull Island",
+  "usersScore": "76%",
+  "criticsScore": "70%"
+}, {
+  "title": "Their Finest",
+  "usersScore": "88%",
+  "criticsScore": "73%"
+}, {
+  "title": "The Incredible Jessica James",
+  "usersScore": "85%",
+  "criticsScore": "66%"
+}, {
+  "title": "Killing Ground",
+  "usersScore": "77%",
+  "criticsScore": "43%"
 }]
