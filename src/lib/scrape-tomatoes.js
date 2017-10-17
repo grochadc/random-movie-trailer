@@ -11,6 +11,8 @@ const fs = require('fs');
   const page = await browser.newPage();
   await page.goto('https://www.rottentomatoes.com/browse/cf-dvd-streaming-all');
 
+  await page.click('button.mb-load-btn');
+
   const movies = await page.$eval('div.mb-movies', el => {
 
     //This code is executed inside the browser context where el is the element returned by the selector ^
