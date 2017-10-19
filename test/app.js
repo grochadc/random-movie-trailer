@@ -38,6 +38,16 @@ describe('##App ' + (env=='dev' ? '(development)' : '(production)'), () => {
            done();
          });
      });
+     it('index=-1 should send a 200 response', (done) => {
+       chai.request(app)
+         .get('/')
+         .query({index: -1})
+         .end((err, res) => {
+           should.exist(res);
+           res.should.have.status(200);
+           done();
+         });
+     });
    });
 
 });
