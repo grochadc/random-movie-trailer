@@ -25,6 +25,7 @@
 		"express": "^4.16.1",
 		"express-handlebars": "^3.0.0",
 		"imdb-api": "^3.1.1",
+		"log-switch": "0.0.3",
 		"movie-trailer": "^1.0.3",
 		"nodemon": "^1.12.1",
 		"rotten-movies": "^0.1.1",
