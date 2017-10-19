@@ -57,9 +57,10 @@ router.get('/', (req, res) => {
           else if(isNaN(index) || index <= 0 || index>movies.length) {
             let index = random.exclude(0,movies.length-1);
             movie = movies[index];
-            reject({
-              msg: errorify('Index is not a number or it\'s out of range.'),
-              movie //Add the var as a property
+            resolve({
+              msg: 'Index is not a number or it\'s out of range.',
+              movie,
+              index //Add the var as a property
              });
           }
           if(debug) console.log('Requested: ', movie.title);
@@ -68,7 +69,6 @@ router.get('/', (req, res) => {
         else if(req.query.trailer){
           movie = {title: req.query.trailer};
         }
-        console.log('Before resolve [movie]\n', [movie]);
         resolve([movie]); //Pass the result as a one item array
       }
       else {
@@ -130,7 +130,6 @@ router.get('/', (req, res) => {
   // ^ Resolves with object finalMovie
 
   const renderMovie = (finalMovie) => {
-    if(debug) console.log('renderMovie(finalMovie) ',finalMovie);
     res.render('main',finalMovie,
     (err, html) =>
     {
@@ -146,7 +145,12 @@ router.get('/', (req, res) => {
 
   const selectMovie = (movies) => {
     if(debug) console.log('selectMovie() called');
-    console.log('movies var',movies)
+    if(movies.msg) {
+      console.log('Index :',movies.index);
+      console.error(errorify(movies.msg));
+      movies = [movies.movie];
+    }
+
     selectRandom(movies)
       .then(requestTrailer)
       .catch((err) => {
@@ -161,9 +165,6 @@ router.get('/', (req, res) => {
 
   readDB(file)
     .then(parseQuery)
-    .catch((err) => {
-      console.error(err.msg);
-     }) //parseQueryErr
       .then(selectMovie)
       .catch((err) => console.error(err));
 }); //Close GET
