@@ -28,10 +28,10 @@ describe('##App ' + (env=='dev' ? '(development)' : '(production)'), () => {
   });
 
   describe('Index:', () =>{
-     it('index=0 should send a 200 response', (done) => {
+     it('index=16 should send a 200 response', (done) => {
        chai.request(app)
          .get('/')
-         .query({index: 0})
+         .query({index: 16})
          .end((err, res) => {
            should.exist(res);
            res.should.have.status(200);
