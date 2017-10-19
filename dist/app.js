@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-/*! random-movie-trailer 2017-10-15 */
-=======
-/*! random-movie-trailer 2017-10-13 */
->>>>>>> merge-db
+/*! random-movie-trailer 2017-10-19 */
 
-const compression=require("compression"),express=require("express"),app=express(),exphbs=require("express-handlebars");var cookieParser=require("cookie-parser"),port=process.env.PORT||3e3,path=require("path"),routes=require(path.join(__dirname,"controllers/routes")),debug="test"!=process.env.NODE_ENV;app.use(compression());const publicFolder=path.join(__dirname,"public/");app.use(express.static(publicFolder)),app.use(cookieParser()),app.use("/",routes);const viewsPath=path.join(__dirname,"views/");app.set("views",viewsPath),app.engine("handlebars",exphbs({defaultLayout:"main",layoutsDir:viewsPath+"/layouts"})),app.set("view engine","handlebars"),app.listen(port,function(){debug&&console.log("Server Starts on "+port)}),module.exports=app;
+const express=require("express"),app=express(),exphbs=require("express-handlebars");var cookieParser=require("cookie-parser");const compression=require("compression"),path=require("path");var routes=require(path.join(__dirname,"controllers/routes"));const port=process.env.PORT||3e3,debug="test"!=process.env.NODE_ENV,publicFolder=path.join(__dirname,"public/");app.use(express.static(publicFolder)),app.use(compression()),app.use(cookieParser()),app.use("/",routes);const viewsPath=path.join(__dirname,"views/");app.set("views",viewsPath),app.engine("handlebars",exphbs({defaultLayout:"main",layoutsDir:viewsPath+"/layouts"})),app.set("view engine","handlebars"),app.listen(port,function(){debug&&console.log("Server Starts on "+port)}),module.exports=app;
