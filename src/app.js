@@ -5,7 +5,10 @@ const app = express();
 const exphbs = require('express-handlebars');
 var cookieParser = require('cookie-parser');
 const compression = require('compression');
+const flash = require('connect-flash');
 const path = require('path');
+const session = require('express-session');
+
 
 var routes = require(path.join(__dirname, 'controllers/routes'));
 
@@ -16,11 +19,19 @@ const port = process.env.PORT || 3000; // process.env.PORT lets the port be set 
 const debug = process.env.NODE_ENV == 'test' ? false : true;
 
 const publicFolder = path.join(__dirname, 'public/');
-app.use(express.static(publicFolder));
 
-app.use(compression());
-app.use(cookieParser());
-app.use('/', routes);
+
+  app.use(express.static(publicFolder));
+  app.use(compression());
+  app.use(cookieParser());
+
+  app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
+  app.use('/', routes);
 
 //View engine
 const viewsPath = path.join(__dirname,'views/');

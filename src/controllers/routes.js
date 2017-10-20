@@ -146,8 +146,8 @@ router.get('/', (req, res) => {
   const selectMovie = (movies) => {
     if(debug) console.log('selectMovie() called');
     if(movies.msg) {
-      console.log('Index :',movies.index);
-      console.error(errorify(movies.msg));
+      if(debug) console.log('Index :',movies.index);
+      if(debug) console.error(errorify(movies.msg));
       movies = [movies.movie];
     }
 
