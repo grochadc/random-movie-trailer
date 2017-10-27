@@ -2,18 +2,18 @@ const express = require('express');
 const router = express.Router();
 
 const movieTrailer = require('movie-trailer');
-const fs = require('fs');
-const path = require('path');
 const request = require('request');
+const path = require('path');
+const fs = require('fs');
 
 var debug = process.env.NODE_ENV == 'test' ? false : true;
 
 const random = require(path.join(__dirname, '../lib/random'));
 const isArray = require('../lib/is-array');
 
-function errorMsg(msg){
-  var message = 'Error: '+msg+ ' Click <a href=".">here</a> to refresh the page.';
-  return message;
+function errorify(err){
+  err += ' Selecting a random movie.';
+  return new Error(err);
 }
 
 //=============================//
@@ -23,16 +23,15 @@ function errorMsg(msg){
 router.get('/', (req, res) => {
   if(debug) console.log('Page requested!');
   if(debug) console.log('Cookies: ', req.cookies);
-  const file = path.join(__dirname,'../models/movies.json');
 
-  var moviesDB; //Populate this variable the first time the model is read
+  const file = path.join(__dirname,'../models/movies.json');
 
   const readDB = (fileName) => {
     return new Promise((resolve, reject) => {
       fs.readFile(fileName, (err,data) => {
         if(err) reject(err);
-        moviesDB = JSON.parse(data); //Here's an array
-        console.log('File read');
+        moviesDB = JSON.parse(data); //Arr of movie objs now in global scope
+        if(debug) console.log('File read');
 
         resolve(moviesDB);
       });
@@ -43,20 +42,28 @@ router.get('/', (req, res) => {
   const parseQuery = (movies) => {
     return new Promise((resolve, reject) => {
       const queries = Object.keys(req.query).length;
-      console.log('Parsing ', queries ,'queries');
+      if(debug) console.log('Parsing ', queries ,'queries');
       if(queries > 0) { //If there's any query run this
         //When calling two parameters
-        if(req.query.index && req.query.trailer) reject('You can\'t call two parameters at once.');
+        if(req.query.index && req.query.trailer) reject(errorify('You can\'t call two parameters at once.'));
         //When calling index
         else if(req.query.index){
           var index = Number(req.query.index);
-          console.log('Calling index ',index);
-          if(index<movies.length && index>=0){
+          if(debug) console.log('Calling index ',index);
+          if(index<movies.length && index>=0){ //Index is a number and in range
             movie = movies[index];
             movie.index = index;
           }
-          else reject(errorMsg('Index is not a number or it\'s out of range.'));
-            console.log('Requested: ', movie);
+          else if(isNaN(index) || index <= 0 || index>movies.length) {
+            let index = random.exclude(0,movies.length-1);
+            movie = movies[index];
+            resolve({
+              msg: 'Index is not a number or it\'s out of range.',
+              movie,
+              index //Add the var as a property
+             });
+          }
+          if(debug) console.log('Requested: ', movie.title);
           }
         //When calling trailer
         else if(req.query.trailer){
@@ -64,7 +71,9 @@ router.get('/', (req, res) => {
         }
         resolve([movie]); //Pass the result as a one item array
       }
-      resolve(movies); //If no query is called just pass the movies through
+      else {
+        resolve(movies); //If no query is called just pass the movies through
+      }
      });
   };
   //^ When a query is called resolves a specific movie or if no query just passes the movies array
@@ -121,7 +130,6 @@ router.get('/', (req, res) => {
   // ^ Resolves with object finalMovie
 
   const renderMovie = (finalMovie) => {
-    console.log('renderMovie(finalMovie) ',finalMovie);
     res.render('main',finalMovie,
     (err, html) =>
     {
@@ -136,7 +144,13 @@ router.get('/', (req, res) => {
 
 
   const selectMovie = (movies) => {
-    console.log('selectMovie() called');
+    if(debug) console.log('selectMovie() called');
+    if(movies.msg) {
+      if(debug) console.log('Index :',movies.index);
+      if(debug) console.error(errorify(movies.msg));
+      movies = [movies.movie];
+    }
+
     selectRandom(movies)
       .then(requestTrailer)
       .catch((err) => {
@@ -151,9 +165,8 @@ router.get('/', (req, res) => {
 
   readDB(file)
     .then(parseQuery)
-      .catch((err) => console.error(err))
-    .then(selectMovie);
-
+      .then(selectMovie)
+      .catch((err) => console.error(err));
 }); //Close GET
 
 module.exports = router;

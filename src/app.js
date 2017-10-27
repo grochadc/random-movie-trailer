@@ -1,29 +1,37 @@
-const compression = require('compression');
 const express = require('express');
 
 //Define app and settings
 const app = express();
 const exphbs = require('express-handlebars');
 var cookieParser = require('cookie-parser');
+const compression = require('compression');
+const flash = require('connect-flash');
+const path = require('path');
+const session = require('express-session');
 
-// set the port of our application
-// process.env.PORT lets the port be set by Heroku
-var port = process.env.PORT || 3000;
-
-var path = require('path');
 
 var routes = require(path.join(__dirname, 'controllers/routes'));
 
-var debug = process.env.NODE_ENV == 'test' ? false : true;
-
-app.use(compression());
+/**
+Settings
+**/
+const port = process.env.PORT || 3000; // process.env.PORT lets the port be set by Heroku
+const debug = process.env.NODE_ENV == 'test' ? false : true;
 
 const publicFolder = path.join(__dirname, 'public/');
-app.use(express.static(publicFolder));
-app.use(cookieParser());
-app.use('/', routes);
 
-//app.use(cookieParser());
+
+  app.use(express.static(publicFolder));
+  app.use(compression());
+  app.use(cookieParser());
+
+  app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
+  app.use('/', routes);
 
 //View engine
 const viewsPath = path.join(__dirname,'views/');
@@ -36,7 +44,6 @@ app.set('view engine', 'handlebars');
 
 app.listen(port, function () {
   if(debug) console.log('Server Starts on '+port);
-  //if(!debug) logs.disable(); //Disable logging if debug variable is false
 });
 
 module.exports = app; //For testing with Mocha

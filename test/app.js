@@ -22,6 +22,32 @@ describe('##App ' + (env=='dev' ? '(development)' : '(production)'), () => {
           res.should.have.status(200);
           done();
         });
+
     });
+
   });
+
+  describe('Index:', () =>{
+     it('index=16 should send a 200 response', (done) => {
+       chai.request(app)
+         .get('/')
+         .query({index: 16})
+         .end((err, res) => {
+           should.exist(res);
+           res.should.have.status(200);
+           done();
+         });
+     });
+     it('index=-1 should send a 200 response', (done) => {
+       chai.request(app)
+         .get('/')
+         .query({index: -1})
+         .end((err, res) => {
+           should.exist(res);
+           res.should.have.status(200);
+           done();
+         });
+     });
+   });
+
 });
