@@ -6,7 +6,7 @@ const fs = require('fs');
 
 const file = 'movies2.json';
 
-(async function () {
+(async () => {
   /* jshint ignore:start */
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
