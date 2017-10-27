@@ -4,8 +4,9 @@ const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs');
 
+const file = 'movies2.json';
 
-(async () => {
+(async function () {
   /* jshint ignore:start */
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -32,7 +33,7 @@ const fs = require('fs');
     return moviesInfo;
   });
 
-  fs.writeFile(path.join(__dirname, '../models/movies.json'), JSON.stringify(movies), (err) => {
+  fs.writeFile(path.join(__dirname, '../models/', file), JSON.stringify(movies), (err) => {
     if(err) throw err;
     console.log('The file has been saved!');
   });
